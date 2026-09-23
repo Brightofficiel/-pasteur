@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation - Inscription</title>
+    <!-- Police moderne Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            /* Dégradé dynamique violet et vert menthe inspiré de ton image */
+            background: linear-gradient(135deg, #7c68ec 0%, #4ae5be 100%);
+            color: #2d3748;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 35px 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 420px;
+        }
+        h2 {
+            color: #1a202c;
+            margin-bottom: 8px;
+            font-size: 26px;
+            text-align: center;
+            font-weight: 700;
+        }
+        p.subtitle {
+            color: #718096;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            color: #2d3748;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #7c68ec;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(124, 104, 236, 0.15);
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            /* Bouton aux accents violets/verts harmonieux */
+            background: linear-gradient(135deg, #7c68ec 0%, #6350d2 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s, opacity 0.2s;
+            box-shadow: 0 4px 12px rgba(124, 104, 236, 0.3);
+        }
+        button:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        /* Message de remerciement et bouton WhatsApp (cachés par défaut) */
+        #thank-you-message {
+            display: none;
+            text-align: center;
+            padding: 10px 0;
+        }
+        #thank-you-message h3 {
+            color: #2e7d32;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+        #thank-you-message p {
+            color: #4a5568;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .whatsapp-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            transition: opacity 0.2s;
+        }
+        .whatsapp-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Formulaire -->
+        <form id="reservation-form">
+            <h2>Réservation</h2>
+            <p class="subtitle">Remplissez ce formulaire pour valider votre place.</p>
+            
+            <div class="form-group">
+                <label for="nom">Nom</label>
+                <input type="text" id="nom" name="data[nom]" required placeholder="Votre nom">
+            </div>
+
+            <div class="form-group">
+                <label for="prenom">Prénom</label>
+                <input type="text" id="prenom" name="data[prenom]" required placeholder="Votre prénom">
+            </div>
+
+            <div class="form-group">
+                <label for="telephone">Numéro WhatsApp</label>
+                <input type="tel" id="telephone" name="data[telephone]" required placeholder="Ex: +228 ...">
+            </div>
+
+            <div class="form-group">
+                <label for="profession">Profession</label>
+                <input type="text" id="profession" name="data[profession]" required placeholder="Votre profession">
+            </div>
+
+            <div class="form-group">
+                <label for="places">Nombre de places réservées</label>
+                <input type="number" id="places" name="data[places]" min="1" value="1" required>
+            </div>
+
+            <button type="submit" id="submit-btn">Valider mon inscription</button>
+        </form>
+
+        <!-- Message de remerciement et lien WhatsApp -->
+        <div id="thank-you-message">
+            <h3>🎉 Inscription validée !</h3>
+            <p>Merci pour votre réservation. Votre place est bien enregistrée.<br>Rejoignez dès maintenant notre groupe officiel :</p>
+            <a href="https://chat.whatsapp.com/D2uoCyM5LUG7zBD4HDN8gd" class="whatsapp-btn" target="_blank">Rejoindre le groupe WhatsApp</a>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('reservation-form');
+        const thankYouMessage = document.getElementById('thank-you-message');
+        const submitBtn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            submitBtn.textContent = 'Envoi en cours...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData(form);
+
+            fetch('https://sheetdb.io/api/v1/jt0r1ypwc7fb0', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Masquer le formulaire et afficher le message + lien WhatsApp
+                form.style.display = 'none';
+                thankYouMessage.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue lors de l\'enregistrement. Veuillez réessayer.');
+                submitBtn.textContent = 'Valider mon inscription';
+                submitBtn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
