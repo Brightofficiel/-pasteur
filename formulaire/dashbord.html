@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Événement</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #eef8fa;
+            color: #243447;
+        }
+
+        /* =========================
+           LAYOUT
+        ========================= */
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 245px;
+            background: linear-gradient(
+                180deg,
+                #09627b,
+                #075a72
+            );
+
+            color: white;
+            padding: 25px 15px;
+
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            z-index: 100;
+        }
+
+
+        .logo {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+
+            background: white;
+            color: #09627b;
+
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+            font-weight: 800;
+
+            margin: auto;
+        }
+
+
+        .logo h2 {
+            margin-top: 10px;
+            font-size: 13px;
+            letter-spacing: .5px;
+        }
+
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+
+        .menu a {
+            text-decoration: none;
+            color: #d7edf2;
+
+            padding: 13px 14px;
+
+            border-radius: 9px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            font-size: 14px;
+            font-weight: 500;
+
+            transition: .2s;
+        }
+
+
+        .menu a:hover,
+        .menu a.active {
+            background: rgba(255,255,255,.16);
+            color: white;
+        }
+
+
+        .menu-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 245px;
+            width: calc(100% - 245px);
+
+            padding: 30px;
+        }
+
+
+        /* HEADER */
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .title h1 {
+            font-size: 25px;
+            color: #173b4a;
+            margin-bottom: 5px;
+        }
+
+
+        .title p {
+            color: #80919b;
+            font-size: 13px;
+        }
+
+
+        .top-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .date {
+            background: white;
+            padding: 11px 17px;
+            border-radius: 25px;
+
+            font-size: 12px;
+            color: #667780;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,.05);
+        }
+
+
+        .connection {
+            background: #e6f9ee;
+            color: #22965b;
+
+            padding: 11px 16px;
+            border-radius: 25px;
+
+            font-size: 12px;
+        }
+
+
+        .connection::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+
+            background: #2ecc71;
+
+            display: inline-block;
+            border-radius: 50%;
+
+            margin-right: 6px;
+        }
+
+
+        /* =========================
+           STATISTICS CARDS
+        ========================= */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .card {
+            background: white;
+
+            border-radius: 17px;
+
+            padding: 22px;
+
+            min-height: 145px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,.04);
+        }
+
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+        }
+
+
+        .blue {
+            background: #e7f1ff;
+        }
+
+        .green {
+            background: #e6faf1;
+        }
+
+        .red {
+            background: #fff0f0;
+        }
+
+        .yellow {
+            background: #fff7df;
+        }
+
+
+        .card-label {
+            color: #6e7f88;
+            font-size: 12px;
+        }
+
+
+        .card-number {
+            font-size: 25px;
+            font-weight: 700;
+
+            color: #193b4a;
+
+            margin-top: 4px;
+        }
+
+
+        .card-footer {
+            margin-top: 18px;
+
+            display: flex;
+            justify-content: space-between;
+
+            font-size: 10px;
+            color: #8c9aa1;
+        }
+
+
+        /* =========================
+           CHART
+        ========================= */
+
+        .chart-card {
+            background: white;
+
+            border-radius: 17px;
+
+            padding: 20px;
+
+            margin-bottom: 18px;
+
+            height: 300px;
+        }
+
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+
+            color: #294653;
+
+            margin-bottom: 15px;
+        }
+
+
+        .chart-container {
+            height: 235px;
+        }
+
+
+        /* =========================
+           TWO COLUMNS
+        ========================= */
+
+        .two-columns {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 18px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .small-card {
+            background: white;
+
+            border-radius: 17px;
+
+            padding: 20px;
+
+            height: 290px;
+        }
+
+
+        .small-chart {
+            height: 235px;
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-card {
+            background: white;
+
+            border-radius: 17px;
+
+            padding: 20px;
+
+            overflow-x: auto;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+
+            font-size: 12px;
+        }
+
+
+        th {
+            text-align: left;
+
+            background: #f4f9fa;
+
+            color: #71828a;
+
+            padding: 12px 10px;
+
+            font-size: 11px;
+        }
+
+
+        td {
+            padding: 13px 10px;
+
+            border-bottom: 1px solid #edf1f3;
+
+            color: #52636c;
+        }
+
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #99a6ac;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width: 1000px) {
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media(max-width: 700px) {
+
+            .sidebar {
+                width: 65px;
+                padding: 15px 8px;
+            }
+
+
+            .logo h2 {
+                display: none;
+            }
+
+
+            .logo-icon {
+                width: 42px;
+                height: 42px;
+            }
+
+
+            .menu a {
+                justify-content: center;
+                padding: 13px 5px;
+            }
+
+
+            .menu a span:not(.menu-icon) {
+                display: none;
+            }
+
+
+            .main {
+                margin-left: 65px;
+                width: calc(100% - 65px);
+
+                padding: 18px 12px;
+            }
+
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+
+            .title h1 {
+                font-size: 20px;
+            }
+
+
+            .top-info {
+                display: none;
+            }
+
+
+            .cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+
+            .card {
+                padding: 15px;
+                min-height: 130px;
+            }
+
+
+            .card-number {
+                font-size: 21px;
+            }
+
+
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+
+
+            .chart-card {
+                height: 280px;
+            }
+
+
+            .table-card {
+                padding: 15px;
+            }
+
+        }
+
+
+        @media(max-width: 420px) {
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                +
+            </div>
+
+            <h2>ÉVÉNEMENT</h2>
+
+        </div>
+
+
+        <nav class="menu">
+
+            <a href="#" class="active">
+                <span class="menu-icon">⌂</span>
+                <span>Accueil</span>
+            </a>
+
+
+            <a href="#inscriptions">
+                <span class="menu-icon">📝</span>
+                <span>Inscriptions</span>
+            </a>
+
+
+            <a href="#participants">
+                <span class="menu-icon">👥</span>
+                <span>Participants</span>
+            </a>
+
+
+            <a href="#statistiques">
+                <span class="menu-icon">📊</span>
+                <span>Statistiques</span>
+            </a>
+
+
+            <a href="#">
+                <span class="menu-icon">⚙️</span>
+                <span>Paramètres</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <div class="topbar">
+
+            <div class="title">
+
+                <h1>Tableau de bord</h1>
+
+                <p>
+                    Suivez en temps réel les inscriptions de votre événement
+                </p>
+
+            </div>
+
+
+            <div class="top-info">
+
+                <div class="date" id="current-date">
+                    📅 Chargement...
+                </div>
+
+                <div class="connection">
+                    Connexion DB
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             STATISTICS
+        ========================== -->
+
+        <section class="cards">
+
+
+            <div class="card">
+
+                <div class="card-top">
+
+                    <div class="card-icon blue">
+                        👤
+                    </div>
+
+                    <div>
+
+                        <div class="card-label">
+                            Total des inscrits
+                        </div>
+
+                        <div
+                            class="card-number"
+                            id="total-inscrits"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-footer">
+
+                    <span>Personnes enregistrées</span>
+
+                    <span id="percentage">
+                        0%
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <div class="card-top">
+
+                    <div class="card-icon green">
+                        📱
+                    </div>
+
+                    <div>
+
+                        <div class="card-label">
+                            Via WhatsApp
+                        </div>
+
+                        <div
+                            class="card-number"
+                            id="total-whatsapp"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-footer">
+
+                    <span>Inscriptions WhatsApp</span>
+
+                    <span>100%</span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <div class="card-top">
+
+                    <div class="card-icon red">
+                        🎟️
+                    </div>
+
+                    <div>
+
+                        <div class="card-label">
+                            Places réservées
+                        </div>
+
+                        <div
+                            class="card-number"
+                            id="total-places"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-footer">
+
+                    <span>Places déjà réservées</span>
+
+                    <span>aujourd'hui</span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <div class="card-top">
+
+                    <div class="card-icon yellow">
+                        👥
+                    </div>
+
+                    <div>
+
+                        <div class="card-label">
+                            Capacité totale
+                        </div>
+
+                        <div class="card-number">
+                            200
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-footer">
+
+                    <span>Occupation</span>
+
+                    <span id="occupation">
+                        0%
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             EVOLUTION
+        ========================== -->
+
+        <section
+            class="chart-card"
+            id="statistiques"
+        >
+
+            <div class="section-title">
+                Évolution des inscriptions
+            </div>
+
+
+            <div class="chart-container">
+
+                <canvas id="inscriptionChart"></canvas>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             TWO CHARTS
+        ========================== -->
+
+        <section class="two-columns">
+
+
+            <div class="small-card">
+
+                <div class="section-title">
+                    Répartition par profession
+                </div>
+
+
+                <div class="small-chart">
+
+                    <canvas id="professionChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="small-card">
+
+                <div class="section-title">
+                    Nombre de places réservées
+                </div>
+
+
+                <div class="small-chart">
+
+                    <canvas id="placesChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             TABLE
+        ========================== -->
+
+        <section
+            class="table-card"
+            id="participants"
+        >
+
+            <div class="section-title">
+                👥 Dernières inscriptions
+            </div>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Nom</th>
+
+                        <th>Prénom</th>
+
+                        <th>WhatsApp</th>
+
+                        <th>Profession</th>
+
+                        <th>Places</th>
+
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="inscriptions-table">
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="empty"
+                        >
+                            Chargement des inscriptions...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+/* =====================================================
+   CONFIGURATION SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://ktvvoitkkloreeidrbwp.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_bgTStOqVySLiIuN6RyLN8g_OsA9bHTe";
+
+
+/* =====================================================
+   CONFIGURATION
+===================================================== */
+
+const CAPACITE_TOTALE = 200;
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+const today = new Date();
+
+document.getElementById("current-date").textContent =
+    "📅 " +
+    today.toLocaleDateString("fr-FR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    });
+
+
+
+/* =====================================================
+   RÉCUPÉRATION DES INSCRIPTIONS
+===================================================== */
+
+async function chargerInscriptions() {
+
+    try {
+
+        const response = await fetch(
+
+            SUPABASE_URL +
+            "/rest/v1/inscriptions?select=*",
+
+            {
+
+                method: "GET",
+
+                headers: {
+
+                    "apikey": SUPABASE_KEY,
+
+                    "Authorization":
+                        "Bearer " + SUPABASE_KEY
+
+                }
+
+            }
+
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Impossible de récupérer les inscriptions."
+            );
+
+        }
+
+
+        const inscriptions =
+            await response.json();
+
+
+        afficherDashboard(inscriptions);
+
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        document.querySelector(
+            ".connection"
+        ).textContent = "Erreur DB";
+
+        document.querySelector(
+            ".connection"
+        ).style.background = "#fff0f0";
+
+        document.querySelector(
+            ".connection"
+        ).style.color = "#c53030";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   AFFICHER DASHBOARD
+===================================================== */
+
+function afficherDashboard(inscriptions) {
+
+
+    /* =========================
+       TOTAL INSCRITS
+    ========================= */
+
+    const total =
+        inscriptions.length;
+
+    document.getElementById(
+        "total-inscrits"
+    ).textContent = total;
+
+
+
+    /* =========================
+       WHATSAPP
+    ========================= */
+
+    let whatsapp = 0;
+
+    inscriptions.forEach(personne => {
+
+        if (
+            personne.whatsapp &&
+            personne.whatsapp.trim() !== ""
+        ) {
+
+            whatsapp++;
+
+        }
+
+    });
+
+
+    document.getElementById(
+        "total-whatsapp"
+    ).textContent = whatsapp;
+
+
+
+    /* =========================
+       PLACES
+    ========================= */
+
+    let totalPlaces = 0;
+
+    inscriptions.forEach(personne => {
+
+        totalPlaces +=
+            Number(personne.nombre_places) || 0;
+
+    });
+
+
+    document.getElementById(
+        "total-places"
+    ).textContent = totalPlaces;
+
+
+
+    /* =========================
+       OCCUPATION
+    ========================= */
+
+    const occupation =
+        Math.min(
+            Math.round(
+                (totalPlaces / CAPACITE_TOTALE) * 100
+            ),
+            100
+        );
+
+
+    document.getElementById(
+        "occupation"
+    ).textContent =
+        occupation + "%";
+
+
+    document.getElementById(
+        "percentage"
+    ).textContent =
+        Math.round(
+    
