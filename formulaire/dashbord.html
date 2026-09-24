@@ -1107,10 +1107,6 @@ function afficherDashboard(inscriptions) {
 
 
 
-    /* =========================
-       OCCUPATION
-    ========================= */
-
     const occupation =
         Math.min(
             Math.round(
@@ -1119,15 +1115,140 @@ function afficherDashboard(inscriptions) {
             100
         );
 
-
-    document.getElementById(
-        "occupation"
-    ).textContent =
+    document.getElementById("occupation").textContent =
         occupation + "%";
 
+    document.getElementById("percentage").textContent =
+        total > 0 ? Math.round((total / CAPACITE_TOTALE) * 100) + "%" : "0%";
 
-    document.getElementById(
-        "percentage"
-    ).textContent =
-        Math.round(
-    
+
+    /* =========================
+       TABLEAU DES INSCRIPTIONS
+    ========================= */
+
+    const tableBody = document.getElementById("inscriptions-table");
+
+    if (inscriptions.length === 0) {
+        tableBody.innerHTML =
+            '<tr><td colspan="6" class="empty">Aucune inscription pour le moment.</td></tr>';
+    } else {
+        tableBody.innerHTML = inscriptions
+            .slice()
+            .reverse()
+            .map(personne => {
+                const date = personne.created_at
+                    ? new Date(personne.created_at).toLocaleDateString("fr-FR")
+                    : "";
+                return `
+                    <tr>
+                        <td>${personne.nom || ""}</td>
+                        <td>${personne.prenom || ""}</td>
+                        <td>${personne.whatsapp || ""}</td>
+                        <td>${personne.profession || ""}</td>
+                        <td>${personne.nombre_places || 0}</td>
+                        <td>${date}</td>
+                    </tr>
+                `;
+            })
+            .join("");
+    }
+
+
+    /* =========================
+       GRAPHIQUE : ÉVOLUTION
+    ========================= */
+
+    const parDate = {};
+    inscriptions.forEach(personne => {
+        if (!personne.created_at) return;
+        const jour = new Date(personne.created_at).toLocaleDateString("fr-FR");
+        parDate[jour] = (parDate[jour] || 0) + 1;
+    });
+
+    const labelsDate = Object.keys(parDate);
+    const valuesDate = Object.values(parDate);
+
+    new Chart(document.getElementById("inscriptionChart"), {
+        type: "line",
+        data: {
+            labels: labelsDate,
+            datasets: [{
+                label: "Inscriptions",
+                data: valuesDate,
+                borderColor: "#09627b",
+                backgroundColor: "rgba(9,98,123,0.1)",
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+        }
+    });
+
+
+    /* =========================
+       GRAPHIQUE : PROFESSIONS
+    ========================= */
+
+    const parProfession = {};
+    inscriptions.forEach(personne => {
+        const prof = personne.profession || "Non précisé";
+        parProfession[prof] = (parProfession[prof] || 0) + 1;
+    });
+
+    new Chart(document.getElementById("professionChart"), {
+        type: "doughnut",
+        data: {
+            labels: Object.keys(parProfession),
+            datasets: [{
+                data: Object.values(parProfession),
+                backgroundColor: [
+                    "#09627b", "#4ae5be", "#7c68ec",
+                    "#f6ad55", "#f56565", "#48bb78"
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+
+    /* =========================
+       GRAPHIQUE : PLACES
+    ========================= */
+
+    new Chart(document.getElementById("placesChart"), {
+        type: "bar",
+        data: {
+            labels: inscriptions.map(p => p.nom || "?"),
+            datasets: [{
+                label: "Places réservées",
+                data: inscriptions.map(p => Number(p.nombre_places) || 0),
+                backgroundColor: "#4ae5be"
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+        }
+    });
+
+}
+
+
+/* =====================================================
+   LANCEMENT
+===================================================== */
+
+chargerInscriptions();
+
+</script>
+
+</body>
+</html>
