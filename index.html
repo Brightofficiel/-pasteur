@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Réservation - Inscription</title>
-    <!-- Police moderne Inter -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         * {
             box-sizing: border-box;
@@ -13,8 +15,8 @@
             padding: 0;
             font-family: 'Inter', sans-serif;
         }
+
         body {
-            /* Dégradé dynamique violet et vert menthe inspiré de ton image */
             background: linear-gradient(135deg, #7c68ec 0%, #4ae5be 100%);
             color: #2d3748;
             display: flex;
@@ -23,6 +25,7 @@
             min-height: 100vh;
             padding: 20px;
         }
+
         .container {
             background-color: #ffffff;
             padding: 35px 30px;
@@ -31,6 +34,7 @@
             width: 100%;
             max-width: 420px;
         }
+
         h2 {
             color: #1a202c;
             margin-bottom: 8px;
@@ -38,15 +42,18 @@
             text-align: center;
             font-weight: 700;
         }
+
         p.subtitle {
             color: #718096;
             font-size: 14px;
             text-align: center;
             margin-bottom: 24px;
         }
+
         .form-group {
             margin-bottom: 16px;
         }
+
         label {
             display: block;
             margin-bottom: 6px;
@@ -54,6 +61,7 @@
             font-weight: 600;
             color: #4a5568;
         }
+
         input {
             width: 100%;
             padding: 12px 14px;
@@ -64,16 +72,17 @@
             font-size: 15px;
             transition: all 0.3s ease;
         }
+
         input:focus {
             outline: none;
             border-color: #7c68ec;
             background-color: #ffffff;
             box-shadow: 0 0 0 3px rgba(124, 104, 236, 0.15);
         }
+
         button {
             width: 100%;
             padding: 14px;
-            /* Bouton aux accents violets/verts harmonieux */
             background: linear-gradient(135deg, #7c68ec 0%, #6350d2 100%);
             border: none;
             border-radius: 10px;
@@ -85,28 +94,50 @@
             transition: transform 0.2s, opacity 0.2s;
             box-shadow: 0 4px 12px rgba(124, 104, 236, 0.3);
         }
+
         button:hover {
             opacity: 0.95;
             transform: translateY(-1px);
         }
 
-        /* Message de remerciement et bouton WhatsApp (cachés par défaut) */
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #error-message {
+            display: none;
+            text-align: center;
+            padding: 12px;
+            margin-top: 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #fff5f5;
+            color: #c53030;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
         #thank-you-message {
             display: none;
             text-align: center;
             padding: 10px 0;
         }
+
         #thank-you-message h3 {
             color: #2e7d32;
             font-size: 22px;
             margin-bottom: 12px;
         }
+
         #thank-you-message p {
             color: #4a5568;
             font-size: 14px;
             margin-bottom: 20px;
             line-height: 1.5;
         }
+
         .whatsapp-btn {
             display: inline-block;
             width: 100%;
@@ -121,85 +152,291 @@
             box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
             transition: opacity 0.2s;
         }
+
         .whatsapp-btn:hover {
             opacity: 0.9;
         }
     </style>
 </head>
+
 <body>
 
-    <div class="container">
-        <!-- Formulaire -->
-        <form id="reservation-form">
-            <h2>Réservation</h2>
-            <p class="subtitle">Remplissez ce formulaire pour valider votre place.</p>
-            
-            <div class="form-group">
-                <label for="nom">Nom</label>
-                <input type="text" id="nom" name="data[nom]" required placeholder="Votre nom">
-            </div>
+<div class="container">
 
-            <div class="form-group">
-                <label for="prenom">Prénom</label>
-                <input type="text" id="prenom" name="data[prenom]" required placeholder="Votre prénom">
-            </div>
+    <!-- FORMULAIRE -->
+    <form id="reservation-form">
 
-            <div class="form-group">
-                <label for="telephone">Numéro WhatsApp</label>
-                <input type="tel" id="telephone" name="data[telephone]" required placeholder="Ex: +228 ...">
-            </div>
+        <h2>Réservation</h2>
 
-            <div class="form-group">
-                <label for="profession">Profession</label>
-                <input type="text" id="profession" name="data[profession]" required placeholder="Votre profession">
-            </div>
+        <p class="subtitle">
+            Remplissez ce formulaire pour valider votre place.
+        </p>
 
-            <div class="form-group">
-                <label for="places">Nombre de places réservées</label>
-                <input type="number" id="places" name="data[places]" min="1" value="1" required>
-            </div>
-
-            <button type="submit" id="submit-btn">Valider mon inscription</button>
-        </form>
-
-        <!-- Message de remerciement et lien WhatsApp -->
-        <div id="thank-you-message">
-            <h3>🎉 Inscription validée !</h3>
-            <p>Merci pour votre réservation. Votre place est bien enregistrée.<br>Rejoignez dès maintenant notre groupe officiel :</p>
-            <a href="https://chat.whatsapp.com/D2uoCyM5LUG7zBD4HDN8gd" class="whatsapp-btn" target="_blank">Rejoindre le groupe WhatsApp</a>
+        <div class="form-group">
+            <label for="nom">Nom</label>
+            <input
+                type="text"
+                id="nom"
+                required
+                placeholder="Votre nom"
+            >
         </div>
+
+        <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input
+                type="text"
+                id="prenom"
+                required
+                placeholder="Votre prénom"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="whatsapp">Numéro WhatsApp</label>
+            <input
+                type="tel"
+                id="whatsapp"
+                required
+                placeholder="Ex: +228 90 00 00 00"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="profession">Profession</label>
+            <input
+                type="text"
+                id="profession"
+                required
+                placeholder="Votre profession"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="nombre_places">
+                Nombre de places réservées
+            </label>
+
+            <input
+                type="number"
+                id="nombre_places"
+                min="1"
+                value="1"
+                required
+            >
+        </div>
+
+        <button type="submit" id="submit-btn">
+            Valider mon inscription
+        </button>
+
+        <div id="error-message"></div>
+
+    </form>
+
+
+    <!-- MESSAGE APRÈS INSCRIPTION -->
+    <div id="thank-you-message">
+
+        <h3>🎉 Inscription validée !</h3>
+
+        <p>
+            Merci pour votre réservation.
+            Votre place est bien enregistrée.
+            <br><br>
+            Rejoignez dès maintenant notre groupe officiel :
+        </p>
+
+        <a
+            href="https://chat.whatsapp.com/D2uoCyM5LUG7zBD4HDN8gd"
+            class="whatsapp-btn"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Rejoindre le groupe WhatsApp
+        </a>
+
     </div>
 
-    <script>
-        const form = document.getElementById('reservation-form');
-        const thankYouMessage = document.getElementById('thank-you-message');
-        const submitBtn = document.getElementById('submit-btn');
+</div>
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            submitBtn.textContent = 'Envoi en cours...';
-            submitBtn.disabled = true;
 
-            const formData = new FormData(form);
+<script>
 
-            fetch('https://sheetdb.io/api/v1/jt0r1ypwc7fb0', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Masquer le formulaire et afficher le message + lien WhatsApp
-                form.style.display = 'none';
-                thankYouMessage.style.display = 'block';
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-                alert('Une erreur est survenue lors de l\'enregistrement. Veuillez réessayer.');
-                submitBtn.textContent = 'Valider mon inscription';
-                submitBtn.disabled = false;
-            });
-        });
-    </script>
+    /* =====================================================
+       CONFIGURATION SUPABASE
+       ===================================================== */
+
+    const SUPABASE_URL =
+        "https://ktvvoitkkloreeidrbwp.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_bgTStOqVySLiIuN6RyLN8g_OsA9bHTe";
+
+
+    /* =====================================================
+       ÉLÉMENTS DU FORMULAIRE
+       ===================================================== */
+
+    const form =
+        document.getElementById("reservation-form");
+
+    const submitBtn =
+        document.getElementById("submit-btn");
+
+    const errorMessage =
+        document.getElementById("error-message");
+
+    const thankYouMessage =
+        document.getElementById("thank-you-message");
+
+
+    /* =====================================================
+       ENVOI DU FORMULAIRE
+       ===================================================== */
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        /* Masquer ancienne erreur */
+        errorMessage.style.display = "none";
+        errorMessage.textContent = "";
+
+        /* Désactiver le bouton */
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Enregistrement...";
+
+
+        /* Récupération des valeurs */
+        const nom =
+            document.getElementById("nom").value.trim();
+
+        const prenom =
+            document.getElementById("prenom").value.trim();
+
+        const whatsapp =
+            document.getElementById("whatsapp").value.trim();
+
+        const profession =
+            document.getElementById("profession").value.trim();
+
+        const nombre_places =
+            parseInt(
+                document.getElementById("nombre_places").value,
+                10
+            );
+
+
+        try {
+
+            /* =================================================
+               VÉRIFICATION DES DONNÉES
+               ================================================= */
+
+            if (!nom || !prenom || !whatsapp || !profession) {
+                throw new Error(
+                    "Veuillez remplir tous les champs."
+                );
+            }
+
+            if (
+                isNaN(nombre_places) ||
+                nombre_places < 1
+            ) {
+                throw new Error(
+                    "Le nombre de places doit être au minimum 1."
+                );
+            }
+
+
+            /* =================================================
+               ENVOI À SUPABASE
+               ================================================= */
+
+            const response = await fetch(
+                SUPABASE_URL + "/rest/v1/inscriptions",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+
+                        "apikey": SUPABASE_KEY,
+
+                        "Authorization":
+                            "Bearer " + SUPABASE_KEY,
+
+                        "Prefer":
+                            "return=minimal"
+                    },
+
+                    body: JSON.stringify({
+                        nom: nom,
+                        prenom: prenom,
+                        whatsapp: whatsapp,
+                        profession: profession,
+                        nombre_places: nombre_places
+                    })
+                }
+            );
+
+
+            /* =================================================
+               LECTURE DE LA RÉPONSE SUPABASE
+               ================================================= */
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                console.error(
+                    "Erreur Supabase :",
+                    response.status,
+                    errorText
+                );
+
+                throw new Error(
+                    "Erreur Supabase (" +
+                    response.status +
+                    ") : " +
+                    errorText
+                );
+            }
+
+
+            /* =================================================
+               INSCRIPTION RÉUSSIE
+               ================================================= */
+
+            form.style.display = "none";
+
+            thankYouMessage.style.display = "block";
+
+
+        } catch (error) {
+
+            console.error(
+                "ERREUR SUPABASE :",
+                error
+            );
+
+            /* Afficher la vraie erreur */
+            errorMessage.textContent =
+                "❌ " + error.message;
+
+            errorMessage.style.display = "block";
+
+            submitBtn.disabled = false;
+
+            submitBtn.textContent =
+                "Valider mon inscription";
+        }
+
+    });
+
+</script>
+
 </body>
 </html>
